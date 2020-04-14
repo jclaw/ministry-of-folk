@@ -1,0 +1,577 @@
+/////////////////////////////////////////////////////////////////////////////////
+// lessons page
+/////////////////////////////////////////////////////////////////////////////////
+
+body#collection-5e71937106c295622822e3e9 td {
+  display: none;
+}
+body#collection-5e71937106c295622822e3e9 td[data-th="Photo"], 
+body#collection-5e71937106c295622822e3e9 td[data-th="Musician Name"], 
+body#collection-5e71937106c295622822e3e9 td[data-th="Primary Teaching Location"],
+body#collection-5e71937106c295622822e3e9 td[data-th="Instruments"], 
+
+/*
+body#collection-5e71937106c295622822e3e9 td[data-th="Email"], 
+body#collection-5e71937106c295622822e3e9 td[data-th="Mailing List Link"],
+body#collection-5e71937106c295622822e3e9 td[data-th="Paypal Link"],
+*/
+
+body#collection-5e71937106c295622822e3e9 td[data-th="Website"], 
+body#collection-5e71937106c295622822e3e9 td[data-th="Facebook Page"], 
+body#collection-5e71937106c295622822e3e9 td[data-th="Instagram Page"], 
+body#collection-5e71937106c295622822e3e9 td[data-th="Patreon Page"], 
+
+body#collection-5e71937106c295622822e3e9 td[data-th="Genre"],
+body#collection-5e71937106c295622822e3e9 td[data-th="Teaching Levels"],
+
+body#collection-5e71937106c295622822e3e9 td[data-th="Description"] {
+  display: block;
+}
+
+body#collection-5e71937106c295622822e3e9 main .page-section:not(.content-collection):not(.gallery-section)>.content-wrapper {
+  box-sizing: border-box;
+  max-width: 900px;
+}
+
+table.lessons-table {
+  white-space: nowrap;
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  border: none;
+}
+table.lessons-table tbody {
+  flex: 1;
+  background: transparent !important;
+}
+table.lessons-table thead, table.lessons-table th, table.lessons-table tr.table-row-1 {
+  display: none;
+}
+table.lessons-table a {
+  color: #2e8ccd;
+}
+
+table.lessons-table .table-row {
+  display: grid;
+  grid-template-columns: 22vw 1fr 100px;
+  grid-template-rows: min-content 1fr;
+  // grid-template-rows: repeat(auto-fill, minmax(0px, 1fr));
+  grid-column-gap: 20px;
+  padding: 0 20px 0 0;
+  margin: 20px 0;
+}
+table.lessons-table .table-row td {
+  padding: 0;
+  grid-column: 2;
+  position: relative;
+}
+table.lessons-table td[data-th="Photo"] {
+  grid-column: 1;
+  grid-row-start: 1;
+  grid-row-end: span 50;
+  padding: 0;
+}
+table.lessons-table img {
+  max-width: none;
+  // max-height: 14vw;
+  height: calc(22vw * 3 / 4);
+  object-fit: cover;
+}
+
+// when an image doesn't get correctly interpolated, it becomes a link. hide it while we fix with js
+table.lessons-table td[data-th="Photo"] a {
+  display: none;
+}
+table.lessons-table td[data-th="Musician Name"] {
+  padding-top: 20px;
+  font-size: 35.2px;
+  line-height: 1.2;
+  grid-row: 1;
+  white-space: normal;
+}
+table.lessons-table td[data-th="Primary Teaching Location"] {
+  grid-row: 2;
+  white-space: normal;
+}
+table.lessons-table td[data-th="Website"] {
+  grid-row: 4;
+}
+table.lessons-table td[data-th="Facebook Page"] {
+  grid-row: 5;
+}
+table.lessons-table td[data-th="Instagram Page"] {
+  grid-row: 6;
+}
+table.lessons-table td[data-th="Patreon Page"] {
+  grid-row: 7;
+}
+
+table.lessons-table td[data-th="Instruments"] {
+  grid-row: 100;
+}
+table.lessons-table td[data-th="Genre"] {
+  grid-row: 101;
+}
+table.lessons-table td[data-th="Teaching Levels"] {
+  grid-row: 102;
+}
+table.lessons-table td[data-th="Description"] {
+  grid-row: 103;
+}
+
+// -------------------------------------------------------------------
+// email, website, facebook, instagram stuff
+
+// TODO: remove
+/*
+table.lessons-table td[data-th="Email"],
+table.lessons-table td[data-th="Mailing List Link"],
+table.lessons-table td[data-th="Paypal Link"] {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: right;
+  position: relative;
+}
+*/
+table.lessons-table .action-links {
+  grid-column: 3;
+  grid-row-start: 1;
+  grid-row-end: span 50;
+  justify-self: right;
+}
+
+
+table.lessons-table td[data-th="Website"],
+table.lessons-table td[data-th="Facebook Page"],
+table.lessons-table td[data-th="Instagram Page"],
+table.lessons-table td[data-th="Patreon Page"] {
+/*
+table.lessons-table td[data-th="Mailing List Link"],
+table.lessons-table td[data-th="Paypal Link"] {
+*/
+  font-size: 16px;
+  line-height: 1.4;
+  max-height: 24px;
+}
+// TODO
+table.lessons-table td[data-th="Email"] a, 
+table.lessons-table td[data-th="Website"] a,
+table.lessons-table td[data-th="Facebook Page"] a,
+table.lessons-table td[data-th="Instagram Page"] a,
+table.lessons-table td[data-th="Patreon Page"] a {
+/*
+table.lessons-table td[data-th="Mailing List Link"] a,
+table.lessons-table td[data-th="Paypal Link"] a {
+*/
+  font-size: 0;
+  height: 20px;
+}
+table.lessons-table[data-mobile-styles=stacked] tbody td[data-th="Website"] a:before,
+table.lessons-table[data-mobile-styles=stacked] tbody td[data-th="Instagram Page"] a:before,
+table.lessons-table[data-mobile-styles=stacked] tbody td[data-th="Facebook Page"] a:before {
+  content: '';
+  display: block;
+  background-color: transparent !important;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+table.lessons-table td[data-th="Website"] a:before {
+  background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e8e6ebe21d2920e56fb0ba7/1586392766607/link-blue.png') !important;
+  // background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e8e6d2a42981458937f0916/1586392362126/link.png') !important;
+  // background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e77e8fe4919f8518be70a8f/1584916738930/url-icon.png') !important;
+}
+table.lessons-table td[data-th="Instagram Page"] a:before {
+    background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e8e6eba5556560887c5e6a3/1586392762443/instagram-blue.png') !important;
+    // background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e8e6d25609b4851ac5be802/1586392357420/instagram.png') !important;
+    // background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e77e4e996c2552a3b87aa10/1584915701923/instagram.png') !important;
+}
+table.lessons-table td[data-th="Facebook Page"] a:before {
+    background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e8e6eb5b44fbb1419e3bde2/1586392757898/facebook-blue.png') !important;
+    // background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e8e6d20ff41b9439c2b254a/1586392352877/facebook.png') !important;
+    // background-image: url('https://static1.squarespace.com/static/5e71246304ad563fce04a802/t/5e77e1e9ac49515565f34605/1584914923654/facebook.png') !important;
+}
+
+
+// TODO
+// table.lessons-table td[data-th="Email"] a:after,
+table.lessons-table td[data-th="Website"] a:after,
+table.lessons-table td[data-th="Facebook Page"] a:after,
+table.lessons-table td[data-th="Instagram Page"] a:after,
+table.lessons-table td[data-th="Patreon Page"] a:after {
+/*
+table.lessons-table td[data-th="Mailing List Link"] a:after,
+table.lessons-table td[data-th="Paypal Link"] a:after {
+*/
+  display: block;
+  font-size: 16px;
+  position: absolute;
+  top: 0;
+  margin-left: 21px;
+}
+
+// TODO
+/*
+table.lessons-table td[data-th="Email"] a:after,
+table.lessons-table td[data-th="Mailing List Link"] a:after, 
+table.lessons-table td[data-th="Paypal Link"] a:after {
+  position: absolute;
+  right: 0;
+  margin: 0;
+}
+*/
+
+// TODO
+/*
+table.lessons-table td[data-th="Email"] a:after {
+  content: 'Contact';
+  color: black;
+  border: 1px solid black;
+  padding: 5px 20px;
+  top: 20px;
+}
+*/
+
+table.lessons-table .action-links {
+  margin-top: 20px;
+  font-size: 16px;
+  text-align: right;
+}
+table.lessons-table .contact-link {
+  display: block;
+  color: black;
+  border: 1px solid black;
+  padding: 5px 20px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+table.lessons-table .donate-link,
+table.lessons-table .mailing-list-link {
+  display: block;
+  line-height: 1.4;
+}
+
+// feature flag
+
+/*
+table.lessons-table .action-links {
+  display: none;
+}
+table.lessons-table .new-actions .action-links {
+  display: block;
+}
+
+table.lessons-table .new-actions td[data-th="Email"],
+table.lessons-table .new-actions td[data-th="Paypal Link"], 
+table.lessons-table .new-actions td[data-th="Mailing List Link"] {
+  display: none !important;
+}
+*/
+// end feature flag
+
+/*
+table.lessons-table td[data-th="Mailing List Link"] a:after {
+  content: 'Join mailing list';
+  top: 94px;
+}
+table.lessons-table td[data-th="Paypal Link"] a:after {
+  content: 'Donate';
+  top: 69px;
+}
+*/
+
+table.lessons-table td[data-th="Website"] a:after {
+  content: 'Website';
+}
+table.lessons-table td[data-th="Facebook Page"] a:after {
+  content: 'Facebook';
+}
+table.lessons-table td[data-th="Instagram Page"] a:after {
+  content: 'Instagram';
+}
+table.lessons-table td[data-th="Patreon Page"] a:after {
+  content: 'Patreon';
+  margin-left: 0;
+}
+
+// end email, website, facebook, instagram stuff
+// -------------------------------------------------------------------
+// genre and levels
+
+table.lessons-table td[data-th="Instruments"],
+table.lessons-table td[data-th="Genre"],
+table.lessons-table td[data-th="Teaching Levels"],
+table.lessons-table td[data-th="Description"] {
+  grid-column-start: 1;
+  grid-column-end: -1;
+  line-height: 1.5;
+  padding: 5px 20px !important;
+}
+
+table.lessons-table td[data-th="Instruments"],
+table.lessons-table td[data-th="Genre"],
+table.lessons-table td[data-th="Teaching Levels"] {
+  // max-width: 240px;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+table.lessons-table td[data-th="Instruments"]:before,
+table.lessons-table td[data-th="Genre"]:before,
+table.lessons-table td[data-th="Teaching Levels"]:before,
+table.lessons-table td[data-th="Description"]:before {
+  display: block;
+  font-size: 16px;
+  color: grey;
+  line-height: 1.6;
+}
+table.lessons-table td[data-th="Instruments"]:before {
+  content: 'Instruments' !important;
+}
+table.lessons-table td[data-th="Genre"]:before {
+  content: 'Genre' !important;
+}
+table.lessons-table td[data-th="Teaching Levels"]:before {
+  content: 'Levels' !important;
+}
+table.lessons-table td[data-th="Description"]:before {
+  content: 'Description' !important;
+}
+
+
+// -------------------------------------------------------------------
+// description
+
+table.lessons-table td[data-th="Description"] {
+  // padding: 20px;
+  padding-bottom: 20px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // border-top: 1px solid #eee;
+}
+table.lessons-table td[data-th="Description"].expanded {
+  white-space: normal;
+  overflow: auto;
+}
+
+table.lessons-table td[data-th="Description"]:after {
+  content: 'Read more';
+  display: block;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+table.lessons-table td[data-th="Description"].expanded:after {
+  content: 'Less';
+}
+
+// -------------------------------------------------------------------
+// mobile
+@media screen and (max-width: 768px) {
+  table.lessons-table .table-row {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+  table.lessons-table .table-row td {
+    grid-column: 1;
+    padding: 0 20px;
+  }
+  table.lessons-table td[data-th="Photo"] {
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  table.lessons-table td[data-th="Photo"] img {
+    max-height: 63vw;
+  }
+
+  table.lessons-table[data-mobile-styles=stacked] tbody td[data-th="Instruments"] {
+    margin-top: 10px;
+  }
+  
+  table.lessons-table[data-mobile-styles=stacked] tbody td[data-th="Instruments"]:before,
+  table.lessons-table[data-mobile-styles=stacked] tbody td[data-th="Genre"]:before,
+  table.lessons-table[data-mobile-styles=stacked] tbody td[data-th="Teaching Levels"]:before,
+  table.lessons-table[data-mobile-styles=stacked] tbody td[data-th="Description"]:before {
+    display: block;
+    background: transparent !important;
+    color: grey !important;
+  }
+  
+  // TODO
+  /*
+  table.lessons-table td[data-th="Mailing List Link"],
+  table.lessons-table td[data-th="Paypal Link"],
+  table.lessons-table td[data-th="Email"] {
+    justify-self: auto;
+    padding: 15px;
+  }
+  table.lessons-table td[data-th="Mailing List Link"] {
+    grid-row: 198;
+  }
+  table.lessons-table td[data-th="Paypal Link"] {
+    grid-row: 199;
+  }
+  table.lessons-table td[data-th="Email"] {
+    grid-row: 200;
+    padding: 20px;
+  }
+  */
+  
+  table.lessons-table .action-links {
+    grid-column: 1;
+    grid-row: 200;
+    padding: 20px;
+    justify-self: auto;
+    text-align: center;
+    
+    display: grid;
+    margin-top: 0;
+  }
+  table.lessons-table .contact-link {
+    order: 3;
+    margin: 10px 0 0 !important;
+  }
+  
+  /*
+  table.lessons-table td[data-th="Mailing List Link"] a:after,
+  table.lessons-table td[data-th="Paypal Link"] a:after,
+  table.lessons-table td[data-th="Email"] a:after {
+    top: 0;
+    left: 20px;
+    right: 20px;
+    text-align: center;
+  }
+  */
+  
+  table.lessons-table td[data-th="Photo"] {
+    grid-row: 1;
+  }
+  table.lessons-table td[data-th="Musician Name"] {
+    grid-row: 2;
+  }
+  table.lessons-table td[data-th="Primary Teaching Location"] {
+    grid-row: 3;
+  }
+  
+  /* resets */
+  table.lessons-table[data-mobile-styles=stacked] tbody td {
+    width: auto;
+  }
+  table.lessons-table[data-mobile-styles=stacked] tbody td:before {
+    display: none;
+    width: auto;
+    padding: 0;
+    font-weight: normal;
+  }
+  table.lessons-table[data-mobile-styles=stacked] tbody td .custom-table-mobileWrap {
+    padding: 0;
+    display: inline;
+  }
+  table.lessons-table[data-mobile-styles=stacked] tbody td img {
+    height: auto;
+  }
+
+}
+
+// MIN-width
+@media screen and (min-width: 500px) {
+  /* search */
+  body#collection-5e71937106c295622822e3e9 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block {
+    max-width: 400px;
+  }
+  .custom-items-search .search-wrap .search-input {
+    // color: white;
+  }
+  .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block.filter-type-dropdown {
+    color: black;
+  }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////
+// events page
+/////////////////////////////////////////////////////////////////////////////////
+.event-time-12hr:after {
+  content: 'EST';
+  display: inline;
+}
+
+.tagcloud-block .category {
+  display: none;
+}
+.tagcloud-block .sqs-tagcloud {
+  display: none;
+}
+.tagcloud-block.unfiltered .sqs-tagcloud {
+  display: block;
+}
+.tagcloud-block.filtered .category {
+  display: block;
+}
+.tagcloud-block .category {
+  font-size: 2em;
+}
+.tagcloud-block .category:before {
+  content: 'Category:';
+  display: inline;
+  margin-right: 0.3em;
+}
+.sqs-tagcloud:before {
+  content: 'Categories:';
+  display: inline;
+}
+.sqs-tagcloud li, .tagcloud-block .back-link {
+  font-size: 1em !important;
+  margin-left: 10px;
+  color: #a8a6a1;
+}
+.sqs-tagcloud li a:after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  transform: translatey(-3px);
+  background: #a8a6a1;
+}
+
+// past events
+.past-events-toggle {
+  color: #a8a6a1;
+  text-align: center;
+  display: block;
+  margin-bottom: 30px;
+}
+
+.past-events-toggle .hide {
+  display: none;
+}
+.eventlist-event--past {
+  visibility: hidden;
+  max-height: 0;
+}
+.eventlist--past.show .past-events-toggle .hide {
+  display: block;
+}
+.eventlist--past.show .past-events-toggle .show {
+  display: none;
+}
+.eventlist--past.show .eventlist-event--past {
+  max-height: none;
+  visibility: visible;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////
+// newsletter form
+/////////////////////////////////////////////////////////////////////////////////
+.black .newsletter-block.sqs-block-newsletter .newsletter-form-field-element {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+}
