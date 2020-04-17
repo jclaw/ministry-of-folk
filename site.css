@@ -9,17 +9,11 @@ body#collection-5e71937106c295622822e3e9 td[data-th="Photo"],
 body#collection-5e71937106c295622822e3e9 td[data-th="Musician Name"], 
 body#collection-5e71937106c295622822e3e9 td[data-th="Primary Teaching Location"],
 body#collection-5e71937106c295622822e3e9 td[data-th="Instruments"], 
-
-/*
-body#collection-5e71937106c295622822e3e9 td[data-th="Email"], 
-body#collection-5e71937106c295622822e3e9 td[data-th="Mailing List Link"],
-body#collection-5e71937106c295622822e3e9 td[data-th="Paypal Link"],
-*/
-
 body#collection-5e71937106c295622822e3e9 td[data-th="Website"], 
 body#collection-5e71937106c295622822e3e9 td[data-th="Facebook Page"], 
 body#collection-5e71937106c295622822e3e9 td[data-th="Instagram Page"], 
 body#collection-5e71937106c295622822e3e9 td[data-th="Patreon Page"], 
+// body#collection-5e71937106c295622822e3e9 td[data-th="Paypal Link"], 
 
 body#collection-5e71937106c295622822e3e9 td[data-th="Genre"],
 body#collection-5e71937106c295622822e3e9 td[data-th="Teaching Levels"],
@@ -76,6 +70,7 @@ table.lessons-table img {
   // max-height: 14vw;
   height: calc(22vw * 3 / 4);
   object-fit: cover;
+  object-position: top;
 }
 
 // when an image doesn't get correctly interpolated, it becomes a link. hide it while we fix with js
