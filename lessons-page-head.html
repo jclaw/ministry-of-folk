@@ -65,11 +65,18 @@ function lessonsPage() {
     $card.addClass('mof-loaded');
     
     var index = $card.attr('data-index');
+    var d = buildCardData($card);
+    cardData[index] = d;
+        
+    var $newEl = createActionLinks($card, d);
+    $card.append($newEl);
     
+  });
+  
+  function buildCardData($card) {
     function getField(fieldName) { return window.getField($card, fieldName); }
     function getLink(fieldName) {return window.getLink($card, fieldName); }
-    
-    var d = {
+    return {
       name: getField('Musician Name').text().trim(),
       email: getLink('Email'),
       instagram: getLink('Instagram Page'),
@@ -78,44 +85,37 @@ function lessonsPage() {
       website: getLink('Website'),
       donate: getLink('Paypal Link'),
       mailingList: getLink('Mailing List Link'),
+      contactPreference: getField('Contact Preference').text().trim(),
+      
+      instruments: getField('Teaching Levels').text().trim().split(', '),
+      levels: getField('Teaching Levels').text().trim().split(', '),
     };
-    cardData[index] = d;
-    
-    var email = getLink('Email');
-    var instagram = getLink('Instagram Page');
-    var facebook = getLink('Facebook Page');
-    var patreon = getLink('Patreon Page');
-    var website = getLink('Website');
-    var donate = getLink('Paypal Link');
-    var mailingList = getLink('Mailing List Link');
-        
-    var contactPreference = getField('Contact Preference').text().trim();
-    var fieldName = '';
+  }
+  
+  function createActionLinks($card, d) {
+    var contactLink;
 
-    if (contactPreference.indexOf('Email') === 0) {
-      fieldName = 'Email';
-    } else if (contactPreference.indexOf('Instagram') === 0) {
-      fieldName = 'Instagram Page';
-    } else if (contactPreference.indexOf('Facebook') === 0) {
-      fieldName = 'Facebook Page';
-    } else if (contactPreference.indexOf('Website') !== -1) {
-      fieldName = 'Website';
+    if (d.contactPreference.indexOf('Email') === 0) {
+      contactLink = d.email + '?subject=Message via Ministry of Folk';
+    } else if (d.contactPreference.indexOf('Instagram') === 0) {
+      contactLink = d.instagram;
+    } else if (d.contactPreference.indexOf('Facebook') === 0) {
+      contactLink = d.facebook;
+    } else if (d.contactPreference.indexOf('Website') !== -1) {
+      contactLink = d.website;
     }
 
-    var contactLink = fieldName ? $card.find('td[data-th="' + fieldName + '"] a').attr('href') : null;
-
-
     var $newContact = contactLink ? $('<a class="contact-link">Contact</a>').attr({
-      href: contactLink + '?subject=Message via Ministry of Folk',
+      href: contactLink,
       target: '_blank'
     }) : '';
 
-    var $newDonate = donate ? $('<a class="donate-link">Donate</a>').attr({
-      href: donate,
+    var $newDonate = d.donate ? $('<a class="donate-link">Donate</a>').attr({
+      href: d.donate,
       target: '_blank'
     }) : '';
-    var $newMailingList = mailingList ? $('<a class="mailing-list-link">Join mailing list</a>').attr({
-      href: mailingList,
+    var $newMailingList = d.mailingList ? $('<a class="mailing-list-link">Join mailing list</a>').attr({
+      href: d.mailingList,
       target: '_blank'
     }) : '';
 
@@ -124,9 +124,9 @@ function lessonsPage() {
     $newEl.append($newContact)
       .append($newDonate)
       .append($newMailingList);
-    $card.append($newEl);
-
-  });
+    
+    return $newEl;
+  }
   
   if (!observer) {
     console.log('initing observer');
