@@ -375,17 +375,20 @@ table.lessons-table td[data-th="Description"].expanded:after {
   order: 1;
 }
 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block {
-  flex: 6;
+  flex: 33%;
+}
+
+.custom-filter-container.custom-filter-view-dropdowns.custom-filter-position-top .customFiltersWrapper .sqs-block.clearAllBtnWrapper, 
+.custom-filter-container.custom-filter-view-dropdowns.custom-filter-position-top .customFiltersWrapper .sqs-block.items-count-wrapper {
+  flex: 50%;
+  width: auto;
+  max-width: none;
 }
 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block.clearAllBtnWrapper {
-  width: auto;
   order: 3;
-  flex: 1 0 auto;
 }
 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block.items-count-wrapper {
-  width: auto;
   order: 4;
-  flex: 1 0 auto;
 }
 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block.items-count-wrapper .sqs-block-content,
 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block.items-count-wrapper .sqs-block-content .items-count-inner {
@@ -521,7 +524,7 @@ table.lessons-table td[data-th="Description"].expanded:after {
 @media screen and (min-width: 500px) {
   /* search */
   body#collection-5e71937106c295622822e3e9 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block {
-    max-width: 400px;
+    /* max-width: 400px; */
   }
   .custom-items-search .search-wrap .search-input {
     // color: white;
