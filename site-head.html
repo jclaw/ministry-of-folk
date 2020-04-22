@@ -1,0 +1,236 @@
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+<script>
+let FILTER_OPTIONS = {};
+const target = {
+  container: '#block-yui_3_17_2_1_1584905868337_5160',
+  items: 'tbody .table-row',
+  settings: {
+    // position: 'top',
+    showItemsCount: false,
+    requestAttrWithAjax: false,
+    // customClasses: 'lite-dropdowns cf-ctrls-inline',
+    // align: 'space-between',
+    // mobilePanel: {
+    //    enabled: false
+    //  },
+    search: {
+      text: "Search by instrument, genre, or name",
+    },
+    pagination: {
+      enabled: true,
+      pageSize: 15,
+      items: { //styles of pages numbers
+        style: 'square', //square, pillow
+        width: '32px', //navigation item width
+        margin: '20px', //navigatin items margin
+        borderWidth: '2px', //items border width
+        backgroundColor: '#fff', //default background color
+        activeBackgroundColor: '#a8a6a1', //active item backround color
+        color: '#a8a6a1', // default items text color
+        activeColor: '#fff' //active items text color
+      },
+    },
+    clearAllButton: { //Button that resets all filter and search control
+      enabled: true, // if true, you will see Clear button, clicking it resets all filters
+      text: 'Clear All', // button value
+      place: 'before' // may be before (all dropdowns) or after or valid css selector to append in
+    },
+    simpleFilter: {
+      anim: true,
+      show: {
+        effect: 'fade',
+        transitionDuration: 60,
+        stagger: 24
+      },
+      hide: {
+        effect: 'fade',
+        transitionDuration: 40,
+        stagger: 18
+      }
+    },
+
+
+    filter: {
+      enabled: true,
+      category: false,
+      tag: false,
+      items: [{
+        name: 'Instrument',
+        multiple: true,
+        getAttr: 'instruments'
+      }]
+    },
+
+    sort: {
+      enabled: false,
+      items: []
+    }
+  }
+}
+
+// TEST PAGE TARGET
+const test_target = {
+  container: '#block-6feb998563fe34fc577e',
+  items: 'tbody .table-row',
+  settings: {
+    position: 'top',
+
+    itemsCount: {
+      enabled: true, //same as showItemsCount
+      text: 'Results: ', //set the items text before counter, it is Items: by default
+      positionOrder: 10 //items counter position, higher means last
+    },
+    clearAllButton: { //Button that resets all filter and search control
+      enabled: true, // if true, you will see Clear button, clicking it resets all filters
+      text: 'Clear All', // button value
+      place: 10 // may be before (all dropdowns) or after or valid css selector to append in
+    },
+    search: {
+      enabled: false,
+      text: "Search by instrument, genre, or name",
+    },
+    pagination: {
+      enabled: true,
+      pageSize: 15,
+      items: { //styles of pages numbers
+        style: 'square', //square, pillow
+        width: '32px', //navigation item width
+        margin: '20px', //navigatin items margin
+        borderWidth: '2px', //items border width
+        backgroundColor: '#fff', //default background color
+        activeBackgroundColor: '#a8a6a1', //active item backround color
+        color: '#a8a6a1', // default items text color
+        activeColor: '#fff' //active items text color
+      },
+    },
+    clearAllButton: { //Button that resets all filter and search control
+      enabled: true, // if true, you will see Clear button, clicking it resets all filters
+      text: 'Clear All', // button value
+      place: 'before' // may be before (all dropdowns) or after or valid css selector to append in
+    },
+    simpleFilter: {
+      anim: true,
+      show: {
+        effect: 'fade',
+        transitionDuration: 60,
+        stagger: 24
+      },
+      hide: {
+        effect: 'fade',
+        transitionDuration: 40,
+        stagger: 18
+      }
+    },
+
+    filter: {
+      enabled: true,
+      category: false,
+      tag: false,
+      // useItemsClassesFoData: false,
+      items: [{
+        name: 'Instrument',
+        options: ["Accordion/Box", "Arrangement", "Banjo", "Bodhrán", "Bouzouki", "Composition", "Concertina", "Cello", "Dance", "Fiddle", "Flute", "Guitar", "Harp", "Mandolin", "Piano", "Percussion", "Voice", "Other"],
+        allowedOptions: ["Accordion/Box", "Arrangement", "Banjo", "Bodhrán", "Bouzouki", "Composition", "Concertina", "Cello", "Dance", "Fiddle", "Flute", "Guitar", "Harp", "Mandolin", "Piano", "Percussion", "Voice", "Other"],
+        sort: 'asAllowed',
+        allLabel: ': All',
+        allOption: ': All',
+        multiple: false,
+        defined: false,
+        strict: false,
+        getAttr: '[data-th="Instruments"]'
+      }, {
+        name: 'Genre',
+        options: ["Celtic", "Scottish", "Irish", "Cape Breton", "Bluegrass", "Old-time", "Quebecois", "Jazz", "Scandinavian", "Other"],
+        allowedOptions: ["Celtic", "Scottish", "Irish", "Cape Breton", "Bluegrass", "Old-time", "Quebecois", "Jazz", "Scandinavian", "Other"],
+        sort: 'asAllowed',
+        allLabel: ': All',
+        allOption: ': All',
+        multiple: false,
+        defined: false,
+        strict: false,
+        getAttr: '[data-th="Genre"]',
+      }, {
+        name: 'Level',
+        options: ['Beginner', 'Intermediate', 'Advanced', 'All levels'],
+        allowedOptions: ['Beginner', 'Intermediate', 'Advanced', 'All levels'],
+        sort: 'asAllowed',
+        allLabel: ': All',
+        allOption: ': All',
+        multiple: false,
+        defined: false,
+        strict: false,
+        getAttr: '[data-th="Teaching Levels"]',
+      }]
+    },
+    
+    hooks: {
+      afterRequest: function (params) {
+        // fix classes
+        let nodes = params.items._nodes;
+        let filterSettings = params.getFilterAttrObj;
+
+        for (const key in filterSettings) {
+          if (!FILTER_OPTIONS[key]) {
+            FILTER_OPTIONS[key] = {};
+            let filter = filterSettings[key];
+            let $dropdown = $('.filter-type-dropdown[data-filter="' + key + '"]');
+
+            $dropdown.find('.archive-group-list .archive-group a').each(function () {
+              let val = $(this).data('filter-val');
+              let text = $(this).text();
+              FILTER_OPTIONS[key][text] = val;
+            });
+          }
+        }
+
+        for (const node of nodes) {
+          let classes = [];
+          for (const key in filterSettings) {
+            let options = FILTER_OPTIONS[key];
+            let filter = filterSettings[key];
+            let foundValues = [];
+            let other = false;
+            let split = $(node).find(filter.attr).text().split(', ');
+            for (const term of split) {
+              let val = options[term];
+              if (val) {
+                foundValues.push(val);
+              } else {
+                other = true;
+              }
+            }
+            
+            if (key === 'level' && foundValues.length == 3) {
+              foundValues.push('all-levels');
+            }
+            if (other) {
+              foundValues.push('other');
+            }
+            classes.push(...foundValues.map(val => `${key}-${val}`));
+          }
+          console.log(classes);
+          $(node).addClass(classes.join(' '));
+
+        }
+      
+      },
+    },
+
+
+    sort: {
+      enabled: false,
+      items: []
+    }
+  }
+}
+window.customFilterSettings = {
+    'targets': [target, test_target]
+};
+
+
+</script>
+<script src="https://assets.squarewebsites.org/custom-filter/custom-filter.min.js"></script>
