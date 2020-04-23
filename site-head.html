@@ -102,7 +102,7 @@ const target = {
     hooks: {
       afterRequest: function (params) {
         // fix classes
-        let nodes = params.items._nodes;
+        window.ALL_NODES = params.items._nodes;
         let filterSettings = params.getFilterAttrObj;
 
         for (const key in filterSettings) {
@@ -119,7 +119,7 @@ const target = {
           }
         }
 
-        for (const node of nodes) {
+        for (const node of ALL_NODES) {
           let classes = [];
           for (const key in filterSettings) {
             const options = FILTER_OPTIONS[key];
@@ -145,6 +145,9 @@ const target = {
             }
             classes.push(...foundValues.map(val => `${key}-${val}`));
           }
+          let recordId = $(node).find('[data-th="RecordID"]').text().trim();
+          classes.push(`record-id-${recordId}`);
+          
           $(node).addClass(classes.join(' '));
 
         }
@@ -162,7 +165,7 @@ const target = {
 
 // TEST PAGE TARGET
 const test_target = {
-  container: '#block-6feb998563fe34fc577e',
+  container: '#block-be5fc8639f13cef1b4d5',
   items: 'tbody .table-row',
   settings: {
     position: 'top',
@@ -258,7 +261,7 @@ const test_target = {
     hooks: {
       afterRequest: function (params) {
         // fix classes
-        let nodes = params.items._nodes;
+        window.ALL_NODES = params.items._nodes;
         let filterSettings = params.getFilterAttrObj;
 
         for (const key in filterSettings) {
@@ -275,7 +278,7 @@ const test_target = {
           }
         }
 
-        for (const node of nodes) {
+        for (const node of ALL_NODES) {
           let classes = [];
           for (const key in filterSettings) {
             const options = FILTER_OPTIONS[key];
@@ -301,7 +304,6 @@ const test_target = {
             }
             classes.push(...foundValues.map(val => `${key}-${val}`));
           }
-          console.log(classes);
           $(node).addClass(classes.join(' '));
 
         }

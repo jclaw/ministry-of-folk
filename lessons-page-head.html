@@ -1,8 +1,5 @@
 <link rel="stylesheet" href="https://assets.squarewebsites.org/custom-tables/style.css">
-
-
 <script src="https://assets.squarewebsites.org/custom-tables/custom-table.js"></script>
-
 <link rel="stylesheet" href="https://assets.squarewebsites.org/custom-filter/custom-filter.min.css"/>
 
 <script>
@@ -130,7 +127,7 @@ function lessonsPage() {
   }
   
   function contactClick(d) {
-    history.pushState(null, null, `#${d.recordId}`);
+    history.pushState(null, null, `#recordId=${encodeURIComponent(d.recordId)}&name=${encodeURIComponent(d.name)}`);
     $('.lightbox-handle.sqs-system-button.sqs-editable-button').click();
   }
   window.contactClick = contactClick;
@@ -185,21 +182,41 @@ function lightboxObserver() {
 
   lightboxObserver.observe($('.sqs-modal-lightbox')[0], { attributes: true });
 
-  const recordId = parseHash();
-  if (recordId) {
+  /*
+  const params = parseHash();
+  if (params.recordId) {
     $('.lightbox-handle.sqs-system-button.sqs-editable-button').click();
   }
+  */
 }
 function renderLightbox() {
-  const recordId = parseHash();
-  if (recordId) {
+  const params = parseHash();
+  if (params.recordId) {
     let $recordIdField = $('.sqs-modal-lightbox .form-wrapper .field-list > .field:first-of-type');
-    $recordIdField.find('input').val(recordId);
+    let $lightboxTitle = $('.sqs-modal-lightbox .form-wrapper .form-title');
+    $recordIdField.find('input').val(params.recordId);
+    let name = params.name;
+    if (!name || name === '') {
+      for (const node of ALL_NODES) {
+        if ($(node).is('.record-id-33')) {
+          name = $(node).find('[data-th="Musician Name"]').text().trim();
+          break;
+        }
+      }
+    }
+    if (name) {
+      $lightboxTitle.text(`Contact ${name}`);
+    }
   }
 }
 function parseHash() {
   const hash = location.hash;
-  return parseInt(hash.slice(1));
+  history.pushState(null, null, `#`);
+  let params = new URLSearchParams(hash.slice(1));
+  return {
+    recordId: parseInt(params.get('recordId')),
+    name: params.get('name'),
+  };
 }
   
 window.getField = function ($card, fieldName) {
