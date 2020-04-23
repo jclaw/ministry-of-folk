@@ -10,16 +10,16 @@ var TBODY_LOAD_CLASSES = ['hiding', 'pre-showing', 'showing'];
   
 $(window).on('DOMContentLoaded', function () {
   lessonsPagePoller();
+  lightboxPoller();
 });
   
-function lessonsPagePoller (_) {
+function lessonsPagePoller(_) {
   if (!$('table.lessons-table .element-showed').length) {
     window.requestAnimationFrame(lessonsPagePoller);
   } else {
     lessonsPage();
   }
 }
-
   
 // repeatable actions that happen on every filter change and page load
 function lessonsPage() {  
@@ -89,6 +89,7 @@ function lessonsPage() {
       
       instruments: getField('Teaching Levels').text().trim().split(', '),
       levels: getField('Teaching Levels').text().trim().split(', '),
+      recordId: parseInt(getField('RecordID').text().trim()),
     };
   }
   
@@ -128,6 +129,13 @@ function lessonsPage() {
     return $newEl;
   }
   
+  function contactClick(d) {
+    history.pushState(null, null, `#${d.recordId}`);
+    $('.lightbox-handle.sqs-system-button.sqs-editable-button').click();
+  }
+  window.contactClick = contactClick;
+ 
+  
   if (!observer) {
     console.log('initing observer');
     MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
@@ -154,6 +162,46 @@ function lessonsPage() {
     observer.observe($('table.lessons-table tbody')[0], { attributes: true });
   }
 }
+  
+
+function lightboxPoller(_) {
+  if (!$('.sqs-modal-lightbox').length) {
+    window.requestAnimationFrame(lightboxPoller);
+  } else {
+    lightboxObserver();
+  }
+}
+function lightboxObserver() {
+  MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+  window.lightboxObserver = new MutationObserver(function(mutations, observer) {
+    for (var i = 0; i < mutations.length; i++) {
+      var mutation = mutations[i];
+      var $tbody = $(mutation.target);
+      if ($tbody.is(':visible')) {
+        renderLightbox();
+      }
+    }
+  });
+
+  lightboxObserver.observe($('.sqs-modal-lightbox')[0], { attributes: true });
+
+  const recordId = parseHash();
+  if (recordId) {
+    $('.lightbox-handle.sqs-system-button.sqs-editable-button').click();
+  }
+}
+function renderLightbox() {
+  const recordId = parseHash();
+  if (recordId) {
+    let $recordIdField = $('.sqs-modal-lightbox .form-wrapper .field-list > .field:first-of-type');
+    $recordIdField.find('input').val(recordId);
+  }
+}
+function parseHash() {
+  const hash = location.hash;
+  return parseInt(hash.slice(1));
+}
+  
 window.getField = function ($card, fieldName) {
   return $card.find('td[data-th="' + fieldName + '"]');
 }
