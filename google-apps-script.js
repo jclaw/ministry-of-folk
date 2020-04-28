@@ -2,29 +2,28 @@ const SHEET_NAME = "messages";
 const ID_COL = 1;
 const STATE_COL = 2;
 const SUBMITTED_ON_COL = 3;
-const SUBJ_COL = 4;
-const MSG_COL = 5;
-const INST_COL = 6;
-const LEVEL_COL = 7;
-const NAME_COL = 8;
-const RECORD_ID_COL = 9;
-const EMAIL_COL = 10;
+const RECORD_ID_COL = 4;
+const NAME_COL = 5;
+const EMAIL_COL = 6;
+const INST_COL = 7;
+const LEVEL_COL = 8;
+const MSG_COL = 9;
 
 const MAIL_QUEUED = 'q';
 const MAIL_SENT = 's';
 
-
-function sendEmail(to, from, subj, msg) {
-  GmailApp.sendEmail(to, subj, msg, {
-    cc: from,
-    bcc: 'ministryoffolk@gmail.com'
+function sendEmail(to, from, subj, html, text) {
+  GmailApp.sendEmail(to, subj, text, {
+    htmlBody: html,
+    cc: from,                           // the student
+    from: 'lessons@ministryoffolk.com', // where the email is actually sent from
+    bcc: 'lessons@ministryoffolk.com',
   });
 }
 
 function getSheetByName(name) {
-  var ss = SpreadsheetApp.openById("1g8S-pmQa-BZ9hODTsdlFGLyGYjRDoHS9sjhftRUjNKg"); // messages from squarespace spreadsheet
+  var ss = SpreadsheetApp.openById("1zKWEcpLuUBIklpj48rGZrx2kFTaALv_R0hTMd6gdVf0"); // messages from squarespace spreadsheet
   var sheets = ss.getSheets();
-  Logger.log(sheets);
   for (var n in sheets) {
     if (name == sheets[n].getName()) {
       return sheets[n];
@@ -32,7 +31,7 @@ function getSheetByName(name) {
   } 
 }
 
-function getTeacherEmail(teacherRecordId) {
+function getTeacherInfo(teacherRecordId) {
   var ss = SpreadsheetApp.openById("1fEkexKhDn3Mb8Pc3hT9Wy6Z2nQbQyNLYl7bV9L93Vr0"); // Ministry Of Folk Data Sheet
   var sheets = ss.getSheets();
   var sheet = sheets[0];
@@ -46,13 +45,16 @@ function getTeacherEmail(teacherRecordId) {
   var colVals = values[0];
   var recordIdCol = colVals.indexOf('RecordID');
   var emailCol = colVals.indexOf('Email');
+  var nameCol = colVals.indexOf('Musician Name');
   
   var recordIds = [];
   var emails = [];
+  var names = [];
   for (var i = 0; i < lastRow; i++) {
     let row = values[i];
     recordIds.push(row[recordIdCol]);
     emails.push(row[emailCol]);
+    names.push(row[nameCol]);
   }
   
   var teacherRow = recordIds.indexOf(teacherRecordId);
@@ -63,15 +65,22 @@ function getTeacherEmail(teacherRecordId) {
   }
 
   var email = emails[teacherRow];
+  var name = names[teacherRow];
   
   if (!email || email === '') {
     throw new Error(`No email found for record id "${teacherRecordId}"`);
   }
-  return email;
+  var firstname = name.split(' ')[0];
+  
+  return {
+    email: email,
+    fullname: name,
+    firstname: firstname
+  };
 }
 
 function test() {
-  getTeacherEmail(33);
+  Logger.log(getTeacherInfo(30));
 }
 
 
@@ -102,9 +111,8 @@ function findLastSentMail(sheet, row) {
 
 function detectChange() {
   var sheet = getSheetByName(SHEET_NAME);
-  Logger.log(sheet);
   if (!sheet) {
-    return;
+    throw new Error(`sheet "${SHEET_NAME}" not found`);
   }
   var lastRow = sheet.getLastRow();
   
@@ -125,9 +133,7 @@ function detectChange() {
   var numRows = lastRow - lastIdRow;
   var numCols = STATE_COL - ID_COL + 1;
   var newRowsRange = sheet.getRange(lastIdRow + 1, ID_COL, numRows, numCols);
-  Logger.log(lastRow);
-  Logger.log(lastIdRow);
-  Logger.log(newValues);
+
   newRowsRange.setValues(newValues);
   
   sendQueuedMails(sheet);
@@ -147,16 +153,12 @@ function sendQueuedMails(sheet) {
   var numCols = lastCol - startCol + 1;
   if (numRows <= 0) { return; }
   
-  Logger.log(lastSentMailRow);
-  Logger.log(lastRow);
-  
   var dataRange = sheet.getRange(startRow, startCol, numRows, numCols);
   var data = dataRange.getValues();
   
   var stateVals = [];
   for (var i in data) {
     // TODO: sanitize all this
-    var subj = data[i][SUBJ_COL - startCol];
     var msg = data[i][MSG_COL - startCol];
     var inst = data[i][INST_COL - startCol];
     var level = data[i][LEVEL_COL - startCol];
@@ -164,20 +166,44 @@ function sendQueuedMails(sheet) {
     var recordId = data[i][RECORD_ID_COL - startCol];
     var from = data[i][EMAIL_COL - startCol];
     
-    var to = getTeacherEmail(recordId);
+    var teacher = getTeacherInfo(recordId);
     
-    var subj = `New lesson request from ${name} via Ministry of Folk`;
-    var emailMsg = `
+    var subj = "New lesson request via Ministry of Folk";
+    
+    var msgHtml = `
+      <p>Hi ${teacher.firstname},</p>
+      <p>You have a new lesson request from <i>${name}</i>!</p>
+      <table>
+      <tr><td style="vertical-align: top; padding-right: 10px">Instrument/topic:</td><td style="font-style: italic;">${inst}</td></tr>
+      <tr><td style="vertical-align: top">Level: </td><td style="font-style: italic;">${level}</td></tr>
+      <tr><td style="vertical-align: top">Message:</td><td style="font-style: italic;">${msg}</td></tr>
+      </table>
+      <br>
+      <p>Please respond directly to ${from}.</p>
+      <div>Cheers,</div>
+      <div>Ministry of Folk</div>
+    `;
+    var msgText = `
+      Hi ${teacher.firstname},
+        
+      You have a new lesson request from ${name}!
+        
       Instrument/topic: ${inst}
       Level: ${level}
       
-      From ${name}:
+      Message:
       ${msg}
+    
+      Please respond directly to ${from}.
+    
+      --
+      Cheers,
+      Ministry of Folk
     `;
     
-    if (to && from && subj && msg) {
-      Logger.log("sending - to: " + to + ", from: " + from + ", subj: " + subj + ", emailMsg: " + emailMsg);
-      // sendEmail(to, from, subj, msg);
+    if (teacher.email && from && msg) {
+      Logger.log("sending - to: " + teacher.email + ", from: " + from + ", subj: " + subj + ", msgHtml: " + msgHtml + ", msgText: " + msgText);
+      sendEmail(teacher.email, from, subj, msgHtml, msgText);
     }
     stateVals.push([MAIL_SENT]);
   }

@@ -375,15 +375,16 @@ table.lessons-table td[data-th="Description"].expanded:after {
   order: 1;
 }
 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block {
-  flex: 33%;
+  flex: 0 33.33%;
 }
 
 .custom-filter-container.custom-filter-view-dropdowns.custom-filter-position-top .customFiltersWrapper .sqs-block.clearAllBtnWrapper, 
 .custom-filter-container.custom-filter-view-dropdowns.custom-filter-position-top .customFiltersWrapper .sqs-block.items-count-wrapper {
-  flex: 50%;
+  flex: 33%;
   width: auto;
   max-width: none;
 }
+
 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block.clearAllBtnWrapper {
   order: 3;
 }
@@ -394,6 +395,10 @@ table.lessons-table td[data-th="Description"].expanded:after {
 .custom-filter-container.custom-filter-view-dropdowns .customFiltersWrapper .sqs-block.items-count-wrapper .sqs-block-content .items-count-inner {
   display: block;
   text-align: right;
+}
+
+#block-yui_3_17_2_1_1587597313372_6020 {
+  display: none;
 }
 
 // -------------------------------------------------------------------
@@ -490,7 +495,8 @@ table.lessons-table td[data-th="Description"].expanded:after {
     flex-wrap: wrap;
     justify-content: flex-end;
   }
-  .custom-filter-container.custom-filter-view-dropdowns.custom-filter-position-top .customFiltersWrapper .sqs-block.filterDropdown {
+  .custom-filter-container.custom-filter-view-dropdowns.custom-filter-position-top .customFiltersWrapper .sqs-block.filterDropdown,
+  .custom-filter-container.custom-filter-view-dropdowns.custom-filter-position-top .customFiltersWrapper .sqs-block.custom-items-search {
     flex: 100%;
     max-width: none;
   }
